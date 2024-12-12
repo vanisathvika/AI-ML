@@ -1,11 +1,8 @@
 import numpy
 from pomegranate import *
-
-# Define the distributions
 guest = DiscreteDistribution({'A': 1./3, 'B': 1./3, 'C': 1./3})
 prize = DiscreteDistribution({'A': 1./3, 'B': 1./3, 'C': 1./3})
 
-# Define the conditional probability table
 monty = ConditionalProbabilityTable(
     [['A', 'A', 'A', 0.0],
      ['A', 'A', 'B', 0.5],
@@ -36,20 +33,16 @@ monty = ConditionalProbabilityTable(
      ['C', 'C', 'C', 0.0]], [guest, prize]
 )
 
-# Create the states
 s1 = State(guest, name="guest")
 s2 = State(prize, name="prize")
 s3 = State(monty, name="monty")
 
-# Create the Bayesian Network
 model = BayesianNetwork("Monty Hall Problem")
 model.add_states(s1, s2, s3)
 model.add_edge(s1, s3)
 model.add_edge(s2, s3)
 model.bake()
 
-# Compute the probability of given observations
 print(model.probability([['A', 'B', 'C'], ['A', 'A', 'C'], ['A', 'C', 'C']]))
 
-# Predict missing values given some observations
 print(model.predict([['A', None, 'C'], ['A', 'A', None], [None, 'B', 'A']]))
